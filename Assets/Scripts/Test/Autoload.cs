@@ -1,10 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
-
-
-
 
 public class Autoload : MonoBehaviour
 {
@@ -12,57 +7,51 @@ public class Autoload : MonoBehaviour
     [SerializeField] private float Y;
     [SerializeField] private float Z;
 
-    private Container container;
+    private CargoHold cargoHold; // Р“СЂСѓР·РѕРІРѕР№ РѕС‚СЃРµРє РґР»СЏ СѓРїСЂР°РІР»РµРЅРёСЏ РіСЂСѓР·Р°РјРё
     [SerializeField] private List<GameObject> cargos;
 
     private void Start()
     {
+        cargoHold = new CargoHold(new Vector3(X, Y, Z), 50000); // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РіСЂСѓР·РѕРІРѕРіРѕ РѕС‚СЃРµРєР° СЃ РјР°РєСЃРёРјР°Р»СЊРЅРѕР№ РїРѕР»РµР·РЅРѕР№ РЅР°РіСЂСѓР·РєРѕР№ РІ 50 С‚РѕРЅРЅ
         PlaceCargos();
     }
 
     private void PlaceCargos()
     {
-        Debug.Log("Начало размещения грузов.");
+        Debug.Log("РќР°С‡Р°Р»Рѕ СЂР°Р·РјРµС‰РµРЅРёСЏ РіСЂСѓР·РѕРІ.");
 
-        // Сортировка грузов по убыванию объема
+        // РЎРѕСЂС‚РёСЂРѕРІРєР° РіСЂСѓР·РѕРІ РїРѕ СѓР±С‹РІР°РЅРёСЋ РѕР±СЉРµРјР°
         cargos.Sort((a, b) => (b.transform.localScale.x * b.transform.localScale.y * b.transform.localScale.z)
             .CompareTo(a.transform.localScale.x * a.transform.localScale.y * a.transform.localScale.z));
-        Debug.Log("Грузы отсортированы по убыванию объема.");
+        Debug.Log("Р“СЂСѓР·С‹ РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°РЅС‹ РїРѕ СѓР±С‹РІР°РЅРёСЋ РѕР±СЉРµРјР°.");
 
-        // Размеры контейнера
-        Vector3 containerSize = new Vector3(X, Y, Z);
-        Debug.Log($"Размеры контейнера: {containerSize}");
-
-        List<PlacedCargo> placedCargos = new List<PlacedCargo>();
-
-        foreach (var cargo in cargos)
+        foreach (var cargoObject in cargos)
         {
             bool placed = false;
-            Vector3 cargoSize = cargo.transform.localScale;
+            Vector3 cargoSize = cargoObject.transform.localScale;
+            float cargoWeight = cargoObject.GetComponent<Cargo>().Weight; // РџРѕР»СѓС‡Р°РµРј РІРµСЃ РіСЂСѓР·Р° РёР· РєРѕРјРїРѕРЅРµРЅС‚Р°
 
-            Debug.Log($"Попытка разместить груз: {cargo.name} с размером {cargoSize}");
+            Debug.Log($"РџРѕРїС‹С‚РєР° СЂР°Р·РјРµСЃС‚РёС‚СЊ РіСЂСѓР·: {cargoObject.name} СЃ СЂР°Р·РјРµСЂР°РјРё {cargoSize} Рё РІРµСЃРѕРј {cargoWeight}");
 
-            // Попробуйте поместить груз в контейнер
-            for (int x = 0; x <= containerSize.x - cargoSize.x; x += (int)cargoSize.x)
+            for (int x = 0; x <= X - cargoSize.x; x += (int)cargoSize.x)
             {
-                for (int y = 0; y <= containerSize.y - cargoSize.y; y += (int)cargoSize.y)
+                for (int y = 0; y <= Y - cargoSize.y; y += (int)cargoSize.y)
                 {
-                    for (int z = 0; z <= containerSize.z - cargoSize.z; z += (int)cargoSize.z)
+                    for (int z = 0; z <= Z - cargoSize.z; z += (int)cargoSize.z)
                     {
                         Vector3 position = new Vector3(x, y, z);
 
-                        // Проверка, чтобы груз поместился
-                        if (CanPlaceCargo(position, cargoSize, placedCargos, containerSize))
+                        // РџСЂРѕРІРµСЂСЏРµРј, РјРѕР¶РЅРѕ Р»Рё СЂР°Р·РјРµСЃС‚РёС‚СЊ РіСЂСѓР·
+                        if (cargoHold.CanPlaceCargo(cargoObject, position))
                         {
-                            PlaceCargo(position, cargo, cargoSize);
-                            placedCargos.Add(new PlacedCargo(position, cargoSize));
+                            cargoHold.AddCargo(cargoObject, position);
                             placed = true;
-                            Debug.Log($"Груз {cargo.name} успешно размещен на позиции {position}");
+                            Debug.Log($"Р“СЂСѓР· {cargoObject.name} СѓСЃРїРµС€РЅРѕ СЂР°Р·РјРµС‰РµРЅ РЅР° РїРѕР·РёС†РёРё {position}");
                             break;
                         }
                         else
                         {
-                            Debug.Log($"Невозможно разместить груз {cargo.name} на позиции {position}");
+                            Debug.Log($"РќРµ СѓРґР°Р»РѕСЃСЊ СЂР°Р·РјРµСЃС‚РёС‚СЊ РіСЂСѓР· {cargoObject.name} РЅР° РїРѕР·РёС†РёРё {position}");
                         }
                     }
                     if (placed) break;
@@ -72,33 +61,69 @@ public class Autoload : MonoBehaviour
 
             if (!placed)
             {
-                Debug.LogWarning($"Не удалось поместить груз: {cargo.name}");
+                Debug.LogWarning($"РќРµ СѓРґР°Р»РѕСЃСЊ СЂР°Р·РјРµСЃС‚РёС‚СЊ РіСЂСѓР·: {cargoObject.name}");
             }
         }
 
-        Debug.Log("Завершение размещения грузов.");
+        Debug.Log("Р—Р°РІРµСЂС€РµРЅРёРµ СЂР°Р·РјРµС‰РµРЅРёСЏ РіСЂСѓР·РѕРІ.");
+    }
+}
+
+public class CargoHold
+{
+    public Vector3 Dimensions { get; private set; }
+    public float MaxPayload { get; private set; }
+    public float CurrentWeight { get; private set; }
+    public Vector3 CenterOfGravity { get; private set; } = new Vector3(13, 0, 0);
+
+    private List<PlacedCargo> placedCargos = new List<PlacedCargo>();
+
+    public CargoHold(Vector3 dimensions, float maxPayload)
+    {
+        Dimensions = dimensions;
+        MaxPayload = maxPayload;
     }
 
-    private bool CanPlaceCargo(Vector3 position, Vector3 size, List<PlacedCargo> placedCargos, Vector3 containerSize)
+    public void AddCargo(GameObject cargo, Vector3 position)
     {
-        Debug.Log($"Проверка возможности размещения груза в позиции {position} с размером {size}");
+        Vector3 size = cargo.transform.localScale;
+        float weight = cargo.GetComponent<Cargo>().Weight;
+        CurrentWeight += weight;
 
-        // Проверка, что груз помещается в контейнере
+        UpdateCenterOfGravity(size, position, weight);
+
+        PlacedCargo newCargo = new PlacedCargo(position, size, weight);
+        placedCargos.Add(newCargo);
+
+        PlaceCargoInScene(cargo, position, size);
+    }
+
+    private void UpdateCenterOfGravity(Vector3 size, Vector3 position, float weight)
+    {
+        float newCenterOfGravityX = 
+            (CurrentWeight * CenterOfGravity.x + weight * position.x) 
+            / (CurrentWeight + weight);
+
+        CenterOfGravity = new Vector3(newCenterOfGravityX, CenterOfGravity.y, CenterOfGravity.z);
+        Debug.Log($"РћР±РЅРѕРІР»РµРЅРЅС‹Р№ С†РµРЅС‚СЂ С‚СЏР¶РµСЃС‚Рё: {CenterOfGravity.x}");
+    }
+
+    public bool CanPlaceCargo(GameObject cargo, Vector3 position)
+    {
+        Vector3 size = cargo.transform.localScale;
+
         if (position.x < 0 || position.y < 0 || position.z < 0 ||
-            position.x + size.x > containerSize.x ||
-            position.y + size.y > containerSize.y ||
-            position.z + size.z > containerSize.z)
+            position.x + size.x > Dimensions.x ||
+            position.y + size.y > Dimensions.y ||
+            position.z + size.z > Dimensions.z)
         {
-            Debug.Log($"Груз выходит за пределы контейнера: {position} + {size} (контейнер: {containerSize})");
             return false;
         }
 
-        // Проверка пересечения с уже размещенными грузами
         foreach (var placedCargo in placedCargos)
         {
-            if (Intersect(position, size, placedCargo.Position, placedCargo.Size)) // Используем размер текущего груза
+            if (Intersect(position, size, placedCargo.Position, placedCargo.Size))
             {
-                Debug.Log($"Пересечение с уже размещенным грузом в позиции {placedCargo.Position} с размером {placedCargo.Size}");
                 return false;
             }
         }
@@ -106,13 +131,11 @@ public class Autoload : MonoBehaviour
         return true;
     }
 
-    private void PlaceCargo(Vector3 position, GameObject cargoObject, Vector3 size)
+    private void PlaceCargoInScene(GameObject cargoObject, Vector3 position, Vector3 size)
     {
-        // Создание нового экземпляра груза
         GameObject placedCargo = Instantiate(cargoObject);
-        placedCargo.transform.position = position + size / 2; // Установка центра объекта на позицию
+        placedCargo.transform.position = position + size / 2; // Р¦РµРЅС‚СЂРёСЂРѕРІР°РЅРёРµ РіСЂСѓР·Р° РЅР° РїРѕР·РёС†РёРё
         placedCargo.transform.localScale = size;
-        Debug.Log($"Размещен груз: {placedCargo.name} на позиции {position} с размером {size}");
     }
 
     private bool Intersect(Vector3 pos1, Vector3 size1, Vector3 pos2, Vector3 size2)
@@ -124,17 +147,23 @@ public class Autoload : MonoBehaviour
                  pos1.z + size1.z <= pos2.z ||
                  pos2.z + size2.z <= pos1.z);
     }
+}
 
-    // Класс для хранения информации о размещенных грузах
-    private class PlacedCargo
+public class PlacedCargo
+{
+    public Vector3 Position { get; }
+    public Vector3 Size { get; }
+    public float Weight { get; }
+
+    public PlacedCargo(Vector3 position, Vector3 size, float weight)
     {
-        public Vector3 Position { get; }
-        public Vector3 Size { get; }
-
-        public PlacedCargo(Vector3 position, Vector3 size)
-        {
-            Position = position;
-            Size = size;
-        }
+        Position = position;
+        Size = size;
+        Weight = weight;
     }
+}
+
+public class Cargo : MonoBehaviour
+{
+    public float Weight;
 }
