@@ -95,7 +95,7 @@ public class CargoHold
         PlacedCargo newCargo = new PlacedCargo(position, size, weight);
         placedCargos.Add(newCargo);
 
-        PlaceCargoInScene(cargo, position, size);
+        /*PlaceCargoInScene(cargo, position, size);*/
     }
 
     private void UpdateCenterOfGravity(Vector3 size, Vector3 position, float weight)
@@ -131,12 +131,12 @@ public class CargoHold
         return true;
     }
 
-    private void PlaceCargoInScene(GameObject cargoObject, Vector3 position, Vector3 size)
+    /*private void PlaceCargoInScene(GameObject cargoObject, Vector3 position, Vector3 size)
     {
         GameObject placedCargo = Instantiate(cargoObject);
         placedCargo.transform.position = position + size / 2; // Центрирование груза на позиции
         placedCargo.transform.localScale = size;
-    }
+    }*/
 
     private bool Intersect(Vector3 pos1, Vector3 size1, Vector3 pos2, Vector3 size2)
     {
