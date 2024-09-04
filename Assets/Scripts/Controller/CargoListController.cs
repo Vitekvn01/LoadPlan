@@ -125,7 +125,7 @@ public class CargoListController : SingletonBase<CargoListController>
 
     private void HoldCreateCargoListButton()
     {
-        if (_length != 0 || _height != 0 || _width != 0 || _weight != 0 || _count != 0)
+        if (_length != 0 && _height != 0 && _width != 0 && _weight != 0 && _count != 0)
         {
             _cargoListLogic.CreateCargoList(_length, _width, _height, _weight, _isTiering, _isOnlyFloor, _count);
             _viewCargoListsPanel.SetAllCargoLists(_cargoListLogic.AllCargoLists); 
