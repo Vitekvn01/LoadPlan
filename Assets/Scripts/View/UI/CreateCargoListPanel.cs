@@ -19,15 +19,17 @@ public class CreateCargoListPanel : MonoBehaviour
     [SerializeField] private Toggle _toogleFloor;
 
 
-
     private float _length = 0;
     private float _height = 0;
     private float _width = 0;
     private float _weight = 0;
-    private float _count = 0;
 
     private bool _isTiering;
     private bool _isOnlyFloor;
+
+    private int _count = 0;
+
+
     #region API
     public event Action OnCreateCargoButton;
 
@@ -35,12 +37,13 @@ public class CreateCargoListPanel : MonoBehaviour
     public event Action<float> OnWidthChanged;
     public event Action<float> OnHeightChanged;
     public event Action<float> OnWeightChanged;
-    public event Action<float> OnCountChanged;
 
     public event Action<bool> OnTieringChanged;
     public event Action<bool> OnOnlyFloorChanged;
 
+    public event Action<int> OnCountChanged;
     #endregion
+
     private void Awake()
     {
         // подписка на обновление inputField
@@ -55,7 +58,7 @@ public class CreateCargoListPanel : MonoBehaviour
 
     private void OnInputFieldCountChanged(string newValue)
     {
-        _count = float.Parse(newValue);
+        _count = int.Parse(newValue);
         OnCountChanged?.Invoke(_count);
     }
 
@@ -94,7 +97,7 @@ public class CreateCargoListPanel : MonoBehaviour
         _isOnlyFloor = change;
         OnOnlyFloorChanged?.Invoke(_isOnlyFloor);
     }
-    public void CreateCargoButton()
+    public void CreateCargoListButton()
     {
         OnCreateCargoButton?.Invoke();
     }

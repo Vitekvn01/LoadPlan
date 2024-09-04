@@ -163,7 +163,4 @@ public class PlacedCargo
     }
 }
 
-public class Cargo : MonoBehaviour
-{
-    public float Weight;
-}
+

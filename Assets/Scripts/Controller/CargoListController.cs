@@ -1,24 +1,30 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class CargoListController : MonoBehaviour
+public class CargoListController : SingletonBase<CargoListController>
 {
+    [Header("Префабы UI")]
     [SerializeField] private GameObject UICreateCargoListPanelPrefab;
-    [SerializeField] private GameObject SpawnerCargoPrefub;
+    [SerializeField] private GameObject UIViewCargoListsPanelPrefab;
 
-    private CreateCargoListPanel _CreateCargoListPanel;
+    private CreateCargoListPanel _createCargoListPanel;
+    private ViewCargoListsPanel _viewCargoListsPanel;
+    private CargoListLogic _cargoListLogic;
 
     private float _length = 0;
     private float _width = 0;
     private float _height = 0;
     private float _weight = 0;
-    private float _count = 0;
+    private int _count = 0;
 
     private bool _isTiering;
     private bool _isOnlyFloor;
 
-    private void Awake()
+    protected override void Awake()
     {
+        InitCargoListLogic();
         InitCreateCargoListPanel();
+        InitViewCargoLists();
     }
 
     private void Start()
@@ -38,7 +44,18 @@ public class CargoListController : MonoBehaviour
     public void InitCreateCargoListPanel()
     {
         GameObject UIPanel = Instantiate(UICreateCargoListPanelPrefab);
-        _CreateCargoListPanel = UIPanel.GetComponent<CreateCargoListPanel>();
+        _createCargoListPanel = UIPanel.GetComponent<CreateCargoListPanel>();
+    }
+
+    public void InitCargoListLogic()
+    {
+        _cargoListLogic = new CargoListLogic();
+    }
+
+    public void InitViewCargoLists()
+    {
+        GameObject UIPanel = Instantiate(UIViewCargoListsPanelPrefab);
+        _viewCargoListsPanel = UIPanel.GetComponent<ViewCargoListsPanel>();
     }
 
     #endregion
@@ -46,26 +63,26 @@ public class CargoListController : MonoBehaviour
     #region Sub/Unsub event
     public void SubscriptCargoSettings()
     {
-        _CreateCargoListPanel.OnCreateCargoButton += HoldCreateCargoListButton;
-        _CreateCargoListPanel.OnLengthChanged += HandleLengthChanged;
-        _CreateCargoListPanel.OnWidthChanged += HandleWidthChanged;
-        _CreateCargoListPanel.OnHeightChanged += HandleHeightChanged;
-        _CreateCargoListPanel.OnWeightChanged += HandleWeightChanged;
-        _CreateCargoListPanel.OnCountChanged += HandleCountChanged;
-        _CreateCargoListPanel.OnTieringChanged += HandleTieringChanged;
-        _CreateCargoListPanel.OnOnlyFloorChanged += HandleOnlyFloorChanged;
+        _createCargoListPanel.OnCreateCargoButton += HoldCreateCargoListButton;
+        _createCargoListPanel.OnLengthChanged += HandleLengthChanged;
+        _createCargoListPanel.OnWidthChanged += HandleWidthChanged;
+        _createCargoListPanel.OnHeightChanged += HandleHeightChanged;
+        _createCargoListPanel.OnWeightChanged += HandleWeightChanged;
+        _createCargoListPanel.OnCountChanged += HandleCountChanged;
+        _createCargoListPanel.OnTieringChanged += HandleTieringChanged;
+        _createCargoListPanel.OnOnlyFloorChanged += HandleOnlyFloorChanged;
     }
 
     private void UnsubscriptCargoSettings()
     {
-        _CreateCargoListPanel.OnCreateCargoButton -= HoldCreateCargoListButton;
-        _CreateCargoListPanel.OnLengthChanged -= HandleLengthChanged;
-        _CreateCargoListPanel.OnWidthChanged -= HandleWidthChanged;
-        _CreateCargoListPanel.OnHeightChanged -= HandleHeightChanged;
-        _CreateCargoListPanel.OnWeightChanged -= HandleWeightChanged;
-        _CreateCargoListPanel.OnCountChanged -= HandleCountChanged;
-        _CreateCargoListPanel.OnTieringChanged -= HandleTieringChanged;
-        _CreateCargoListPanel.OnOnlyFloorChanged -= HandleOnlyFloorChanged;
+        _createCargoListPanel.OnCreateCargoButton -= HoldCreateCargoListButton;
+        _createCargoListPanel.OnLengthChanged -= HandleLengthChanged;
+        _createCargoListPanel.OnWidthChanged -= HandleWidthChanged;
+        _createCargoListPanel.OnHeightChanged -= HandleHeightChanged;
+        _createCargoListPanel.OnWeightChanged -= HandleWeightChanged;
+        _createCargoListPanel.OnCountChanged -= HandleCountChanged;
+        _createCargoListPanel.OnTieringChanged -= HandleTieringChanged;
+        _createCargoListPanel.OnOnlyFloorChanged -= HandleOnlyFloorChanged;
     }
 
     #endregion
@@ -91,7 +108,7 @@ public class CargoListController : MonoBehaviour
         _weight = newWeight;
     }
 
-    private void HandleCountChanged(float newCount)
+    private void HandleCountChanged(int newCount)
     {
         _count = newCount;
     }
@@ -108,6 +125,16 @@ public class CargoListController : MonoBehaviour
 
     private void HoldCreateCargoListButton()
     {
+        if (_length != 0 || _height != 0 || _width != 0 || _weight != 0 || _count != 0)
+        {
+            _cargoListLogic.CreateCargoList(_length, _width, _height, _weight, _isTiering, _isOnlyFloor, _count);
+            _viewCargoListsPanel.SetAllCargoLists(_cargoListLogic.AllCargoLists); 
+            Debug.Log("Всего листов: " + _cargoListLogic.AllCargoLists.Count);
+
+        }
+        else Debug.LogWarning("Заполните все поля!");
+
+
     }
     #endregion
 

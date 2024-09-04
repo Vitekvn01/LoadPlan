@@ -2,17 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CargoListLogic : MonoBehaviour
+public class CargoListLogic
 {
-    private List<List<Cargo>> CargoLists = new List<List<Cargo>>();
-    void Start()
+    private List<List<Cargo>> _allCargoLists = new List<List<Cargo>>();
+
+    public List<List<Cargo>> AllCargoLists => _allCargoLists;
+
+    public void CreateCargoList(float length, float width, float height, float weight, bool isTiering, bool isOnlyFloor,  int count)
     {
-        
+        List<Cargo> CargoList = new List<Cargo>();
+
+        for (int i = 0; i < count; i++)
+        {
+            Cargo cargo = new Cargo(length, width, height, weight, isTiering, isOnlyFloor);
+            CargoList.Add(cargo);
+        }
+
+        _allCargoLists.Add(CargoList);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
