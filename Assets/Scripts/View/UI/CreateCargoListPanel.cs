@@ -9,11 +9,11 @@ using UnityEngine.UI;
 public class CreateCargoListPanel : MonoBehaviour
 {
     [Header("Поля ввода")]
-    [SerializeField] private TMP_InputField inputFieldLength;
-    [SerializeField] private TMP_InputField inputFieldHeight;
-    [SerializeField] private TMP_InputField inputFieldWidth;
-    [SerializeField] private TMP_InputField inputFieldWeight;
-    [SerializeField] private TMP_InputField inputFieldCount;
+    [SerializeField] private TMP_InputField _inputFieldLength;
+    [SerializeField] private TMP_InputField _inputFieldHeight;
+    [SerializeField] private TMP_InputField _inputFieldWidth;
+    [SerializeField] private TMP_InputField _inputFieldWeight;
+    [SerializeField] private TMP_InputField _inputFieldCount;
 
     [SerializeField] private Toggle _toogleTiering;
     [SerializeField] private Toggle _toogleFloor;
@@ -44,11 +44,11 @@ public class CreateCargoListPanel : MonoBehaviour
     private void Awake()
     {
         // подписка на обновление inputField
-        inputFieldLength.onValueChanged.AddListener(OnInputFieldLengthChanged);
-        inputFieldWidth.onValueChanged.AddListener(OnInputFieldWidthChanged);
-        inputFieldHeight.onValueChanged.AddListener(OnInputFieldHeightChanged);
-        inputFieldWeight.onValueChanged.AddListener(OnInputFieldWeightChanged);
-        inputFieldCount.onValueChanged.AddListener(OnInputFieldCountChanged);
+        _inputFieldLength.onValueChanged.AddListener(OnInputFieldLengthChanged);
+        _inputFieldWidth.onValueChanged.AddListener(OnInputFieldWidthChanged);
+        _inputFieldHeight.onValueChanged.AddListener(OnInputFieldHeightChanged);
+        _inputFieldWeight.onValueChanged.AddListener(OnInputFieldWeightChanged);
+        _inputFieldCount.onValueChanged.AddListener(OnInputFieldCountChanged);
         _toogleTiering.onValueChanged.AddListener(OnToogleTieringChanged);
         _toogleFloor.onValueChanged.AddListener(OnToogleOnlyFloorChanged);
     }

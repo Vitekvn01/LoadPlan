@@ -46,7 +46,7 @@ public class CargoListController : MonoBehaviour
     #region Sub/Unsub event
     public void SubscriptCargoSettings()
     {
-        _CreateCargoListPanel.OnCreateCargoButton += HoldCreateCargoButton;
+        _CreateCargoListPanel.OnCreateCargoButton += HoldCreateCargoListButton;
         _CreateCargoListPanel.OnLengthChanged += HandleLengthChanged;
         _CreateCargoListPanel.OnWidthChanged += HandleWidthChanged;
         _CreateCargoListPanel.OnHeightChanged += HandleHeightChanged;
@@ -58,7 +58,7 @@ public class CargoListController : MonoBehaviour
 
     private void UnsubscriptCargoSettings()
     {
-        _CreateCargoListPanel.OnCreateCargoButton -= HoldCreateCargoButton;
+        _CreateCargoListPanel.OnCreateCargoButton -= HoldCreateCargoListButton;
         _CreateCargoListPanel.OnLengthChanged -= HandleLengthChanged;
         _CreateCargoListPanel.OnWidthChanged -= HandleWidthChanged;
         _CreateCargoListPanel.OnHeightChanged -= HandleHeightChanged;
@@ -69,7 +69,6 @@ public class CargoListController : MonoBehaviour
     }
 
     #endregion
-
 
     #region обработка событий
     private void HandleLengthChanged(float newLength)
@@ -107,7 +106,7 @@ public class CargoListController : MonoBehaviour
         _isOnlyFloor = isOnlyFloor;
     }
 
-    private void HoldCreateCargoButton()
+    private void HoldCreateCargoListButton()
     {
     }
     #endregion
