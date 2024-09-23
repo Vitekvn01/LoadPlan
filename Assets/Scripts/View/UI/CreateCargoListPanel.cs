@@ -14,6 +14,7 @@ public class CreateCargoListPanel : MonoBehaviour
     [SerializeField] private TMP_InputField _inputFieldWidth;
     [SerializeField] private TMP_InputField _inputFieldWeight;
     [SerializeField] private TMP_InputField _inputFieldCount;
+    [SerializeField] private TMP_InputField _inputFieldName;
 
     [SerializeField] private Toggle _toogleTiering;
     [SerializeField] private Toggle _toogleFloor;
@@ -23,6 +24,7 @@ public class CreateCargoListPanel : MonoBehaviour
     private float _height = 0;
     private float _width = 0;
     private float _weight = 0;
+    private string _name = "NoNameCargo";
 
     private bool _isTiering;
     private bool _isOnlyFloor;
@@ -42,18 +44,23 @@ public class CreateCargoListPanel : MonoBehaviour
     public event Action<bool> OnOnlyFloorChanged;
 
     public event Action<int> OnCountChanged;
+
+    public event Action<string> OnNameChanged;
     #endregion
 
     private void Awake()
     {
-        // подписка на обновление inputField
+        // подписка на обновление inputField и toogle
         _inputFieldLength.onValueChanged.AddListener(OnInputFieldLengthChanged);
         _inputFieldWidth.onValueChanged.AddListener(OnInputFieldWidthChanged);
         _inputFieldHeight.onValueChanged.AddListener(OnInputFieldHeightChanged);
         _inputFieldWeight.onValueChanged.AddListener(OnInputFieldWeightChanged);
         _inputFieldCount.onValueChanged.AddListener(OnInputFieldCountChanged);
+        _inputFieldName.onValueChanged.AddListener(OnInputFieldNameChanged);
+
         _toogleTiering.onValueChanged.AddListener(OnToogleTieringChanged);
         _toogleFloor.onValueChanged.AddListener(OnToogleOnlyFloorChanged);
+
     }
 
     private void OnInputFieldCountChanged(string newValue)
@@ -96,6 +103,12 @@ public class CreateCargoListPanel : MonoBehaviour
     {
         _isOnlyFloor = change;
         OnOnlyFloorChanged?.Invoke(_isOnlyFloor);
+    }
+
+    private void OnInputFieldNameChanged(string newValue)
+    {
+        _name = newValue;
+        OnNameChanged?.Invoke(_name);
     }
     public void CreateCargoListButton()
     {

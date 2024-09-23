@@ -16,6 +16,7 @@ public class CargoListController : SingletonBase<CargoListController>
     private float _height = 0;
     private float _weight = 0;
     private int _count = 0;
+    private string _name = "NoNameCargo";
 
     private bool _isTiering;
     private bool _isOnlyFloor;
@@ -69,6 +70,7 @@ public class CargoListController : SingletonBase<CargoListController>
         _createCargoListPanel.OnHeightChanged += HandleHeightChanged;
         _createCargoListPanel.OnWeightChanged += HandleWeightChanged;
         _createCargoListPanel.OnCountChanged += HandleCountChanged;
+        _createCargoListPanel.OnNameChanged += HandleNameChanged;
         _createCargoListPanel.OnTieringChanged += HandleTieringChanged;
         _createCargoListPanel.OnOnlyFloorChanged += HandleOnlyFloorChanged;
     }
@@ -113,6 +115,11 @@ public class CargoListController : SingletonBase<CargoListController>
         _count = newCount;
     }
 
+    private void HandleNameChanged(string newName)
+    {
+        _name = newName;
+    }
+
     private void HandleTieringChanged(bool isTiering)
     {
         _isTiering = isTiering;
@@ -127,7 +134,7 @@ public class CargoListController : SingletonBase<CargoListController>
     {
         if (_length != 0 && _height != 0 && _width != 0 && _weight != 0 && _count != 0)
         {
-            _cargoListLogic.CreateCargoList(_length, _width, _height, _weight, _isTiering, _isOnlyFloor, _count);
+            _cargoListLogic.CreateCargoList(_length, _width, _height, _weight, _name, _isTiering, _isOnlyFloor, _count);
             _viewCargoListsPanel.SetAllCargoLists(_cargoListLogic.AllCargoLists); 
             Debug.Log("Всего листов: " + _cargoListLogic.AllCargoLists.Count);
 

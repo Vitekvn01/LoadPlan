@@ -8,13 +8,13 @@ public class CargoListLogic
 
     public List<List<Cargo>> AllCargoLists => _allCargoLists;
 
-    public void CreateCargoList(float length, float width, float height, float weight, bool isTiering, bool isOnlyFloor,  int count)
+    public void CreateCargoList(float length, float width, float height, float weight, string name, bool isTiering, bool isOnlyFloor,  int count)
     {
         List<Cargo> CargoList = new List<Cargo>();
 
         for (int i = 0; i < count; i++)
         {
-            Cargo cargo = new Cargo(length, width, height, weight, isTiering, isOnlyFloor);
+            Cargo cargo = new Cargo(length, width, height, weight, name, isTiering, isOnlyFloor);
             CargoList.Add(cargo);
         }
 

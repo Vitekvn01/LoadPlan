@@ -11,6 +11,7 @@ public class InfoCargoList : MonoBehaviour
     public TextMeshProUGUI _heightText;
     public TextMeshProUGUI _weightText;
     public TextMeshProUGUI _countText;
+    public TextMeshProUGUI _nameText;
 
     public Toggle _toogleTiering;
     public Toggle _toogleFloor;
@@ -21,6 +22,7 @@ public class InfoCargoList : MonoBehaviour
         _widthText.text = "Width:" + cargo.Width.ToString();
         _heightText.text = "Height:" + cargo.Height.ToString();
         _weightText.text = "Weight:" + cargo.Weight.ToString();
+        _nameText.text = cargo.Name.ToString();
         _countText.text = "Count:" + count.ToString();
         _toogleTiering.isOn = cargo.IsTiering;
         _toogleFloor.isOn = cargo.IsOnlyFloor;
