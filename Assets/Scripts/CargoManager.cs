@@ -10,7 +10,6 @@ public class CargoManager : MonoBehaviour
 
     public float MaxMomentOfForce = 5000f; // Максимальный момент силы для устойчивости (Н·м)
     public float AirDensity = 1.225f; // Плотность воздуха (кг/м³)
-    public float Speed = 50f; // Скорость груза (м/с)
     public float DragCoefficient = 0.3f; // Коэффициент лобового сопротивления
 
     public bool CanPlaceCargo(GameObject cargo, Vector3 position)
@@ -21,7 +20,7 @@ public class CargoManager : MonoBehaviour
         float crossSectionalArea = size.x * size.z; // Площадь поперечного сечения
 
         // Проверка на выход за границы грузового отсека
-        if (position.x < 0  position.y < 0  position.z < 0 ||
+        if (position.x < 0 || position.y < 0 || position.z < 0 ||
             position.x + size.x > Dimensions.x ||
             position.y + size.y > Dimensions.y ||
             position.z + size.z > Dimensions.z)
@@ -75,7 +74,7 @@ public class CargoManager : MonoBehaviour
         }
 
         // Проверка лобового сопротивления
-        float dragForce = 0.5f * DragCoefficient * AirDensity * Speed * Speed * crossSectionalArea;
+        float dragForce = 0.5f * DragCoefficient * AirDensity * crossSectionalArea;
         if (dragForce > MaxMomentOfForce) // Можно сравнивать с моментом силы или другим критерием
         {
             return false;
@@ -92,14 +91,5 @@ public class CargoManager : MonoBehaviour
 
         // Добавление груза в список размещенных
         placedCargos.Add(new PlacedCargo(position, size, cargoObject.GetComponent<Cargo>().Weight));
-    }
-    private bool Intersect(Vector3 pos1, Vector3 size1, Vector3 pos2, Vector3 size2)
-    {
-        return !(pos1.x + size1.x <= pos2.x ||
-                 pos2.x + size2.x <= pos1.x ||
-                 pos1.y + size1.y <= pos2.y ||
-                 pos2.y + size2.y <= pos1.y ||
-                 pos1.z + size1.z <= pos2.z ||
-                 pos2.z + size2.z <= pos1.z);
     }
 }
