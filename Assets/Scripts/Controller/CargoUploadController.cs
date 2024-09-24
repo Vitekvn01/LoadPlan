@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class CargoUploadController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private CargoManager _cargoManager;
+
+    private void Start()
     {
-        
+        _cargoManager = gameObject.AddComponent<CargoManager>();
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void HoldUploadButton()
     {
-        
+        // должен вызываться метод запуска алгоритма
+        // передаём лист CargoListController.Instance.AllCargoLists, размеры грузовового отсека, и начальную позицию
     }
 }

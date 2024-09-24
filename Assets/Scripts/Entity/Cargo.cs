@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Cargo : MonoBehaviour
 {
+    [SerializeField] public GameObject CargoPrefab;
+
     private float _length;
     public float Length => _length;
 
