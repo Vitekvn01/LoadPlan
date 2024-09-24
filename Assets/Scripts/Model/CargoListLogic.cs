@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class CargoListLogic
 {
-    private List<List<Cargo>> _allCargoLists = new List<List<Cargo>>();
+    public CargoListLogic(List<List<Cargo>> AllCargoList)
+    {
+        _allCargoLists = AllCargoList;
+    }
 
+    private List<List<Cargo>> _allCargoLists;
     public List<List<Cargo>> AllCargoLists => _allCargoLists;
 
     public void CreateCargoList(float length, float width, float height, float weight, string name, bool isTiering, bool isOnlyFloor, int count)

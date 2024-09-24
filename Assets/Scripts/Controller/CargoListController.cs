@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,6 +11,9 @@ public class CargoListController : SingletonBase<CargoListController>
     private CreateCargoListPanel _createCargoListPanel;
     private ViewCargoListsPanel _viewCargoListsPanel;
     private CargoListLogic _cargoListLogic;
+
+    private List<List<Cargo>> _allCargoLists = new List<List<Cargo>>();
+    public List<List<Cargo>> AllCargoLists => _allCargoLists;
 
     private float _length = 0;
     private float _width = 0;
@@ -50,7 +54,7 @@ public class CargoListController : SingletonBase<CargoListController>
 
     public void InitCargoListLogic()
     {
-        _cargoListLogic = new CargoListLogic();
+        _cargoListLogic = new CargoListLogic(_allCargoLists);
     }
 
     public void InitViewCargoLists()
