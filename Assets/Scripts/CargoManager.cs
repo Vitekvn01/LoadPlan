@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using UnityEngine;
+
 public class CargoManager : MonoBehaviour
 {
     public Vector3 Dimensions; // Размеры грузового отсека
