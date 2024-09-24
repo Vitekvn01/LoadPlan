@@ -93,3 +93,13 @@ public class CargoManager : MonoBehaviour
         // Добавление груза в список размещенных
         placedCargos.Add(new PlacedCargo(position, size, cargoObject.GetComponent<Cargo>().Weight));
     }
+    private bool Intersect(Vector3 pos1, Vector3 size1, Vector3 pos2, Vector3 size2)
+    {
+        return !(pos1.x + size1.x <= pos2.x ||
+                 pos2.x + size2.x <= pos1.x ||
+                 pos1.y + size1.y <= pos2.y ||
+                 pos2.y + size2.y <= pos1.y ||
+                 pos1.z + size1.z <= pos2.z ||
+                 pos2.z + size2.z <= pos1.z);
+    }
+}
