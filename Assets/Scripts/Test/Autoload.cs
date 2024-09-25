@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 public class Autoload : MonoBehaviour
@@ -7,12 +8,11 @@ public class Autoload : MonoBehaviour
     [SerializeField] private float Y;
     [SerializeField] private float Z;
 
-    private CargoHold cargoHold; // Грузовой отсек для управления грузами
+    private Container container;
     [SerializeField] private List<GameObject> cargos;
 
     private void Start()
     {
-        cargoHold = new CargoHold(new Vector3(X, Y, Z), 50000); // Инициализация грузового отсека с максимальной полезной нагрузкой в 50 тонн
         PlaceCargos();
     }
 
@@ -25,33 +25,40 @@ public class Autoload : MonoBehaviour
             .CompareTo(a.transform.localScale.x * a.transform.localScale.y * a.transform.localScale.z));
         Debug.Log("Грузы отсортированы по убыванию объема.");
 
-        foreach (var cargoObject in cargos)
+        // Размеры контейнера
+        Vector3 containerSize = new Vector3(X, Y, Z);
+        Debug.Log($"Размеры контейнера: {containerSize}");
+
+        List<PlacedCargo> placedCargos = new List<PlacedCargo>();
+
+        foreach (var cargo in cargos)
         {
             bool placed = false;
-            Vector3 cargoSize = cargoObject.transform.localScale;
-            float cargoWeight = cargoObject.GetComponent<Cargo>().Weight; // Получаем вес груза из компонента
+            Vector3 cargoSize = cargo.transform.localScale;
 
-            Debug.Log($"Попытка разместить груз: {cargoObject.name} с размерами {cargoSize} и весом {cargoWeight}");
+            Debug.Log($"Попытка разместить груз: {cargo.name} с размером {cargoSize}");
 
-            for (int x = 0; x <= X - cargoSize.x; x += (int)cargoSize.x)
+            // Попробуйте поместить груз в контейнер
+            for (int x = 0; x <= containerSize.x - cargoSize.x; x += (int)cargoSize.x)
             {
-                for (int y = 0; y <= Y - cargoSize.y; y += (int)cargoSize.y)
+                for (int y = 0; y <= containerSize.y - cargoSize.y; y += (int)cargoSize.y)
                 {
-                    for (int z = 0; z <= Z - cargoSize.z; z += (int)cargoSize.z)
+                    for (int z = 0; z <= containerSize.z - cargoSize.z; z += (int)cargoSize.z)
                     {
                         Vector3 position = new Vector3(x, y, z);
 
-                        // Проверяем, можно ли разместить груз
-                        if (cargoHold.CanPlaceCargo(cargoObject, position))
+                        // Проверка, чтобы груз поместился
+                        if (CanPlaceCargo(position, cargoSize, placedCargos, containerSize))
                         {
-                            cargoHold.AddCargo(cargoObject, position);
+                            PlaceCargo(position, cargo, cargoSize);
+                            placedCargos.Add(new PlacedCargo(position, cargoSize));
                             placed = true;
-                            Debug.Log($"Груз {cargoObject.name} успешно размещен на позиции {position}");
+                            Debug.Log($"Груз {cargo.name} успешно размещен на позиции {position}");
                             break;
                         }
                         else
                         {
-                            Debug.Log($"Не удалось разместить груз {cargoObject.name} на позиции {position}");
+                            Debug.Log($"Невозможно разместить груз {cargo.name} на позиции {position}");
                         }
                     }
                     if (placed) break;
@@ -61,69 +68,33 @@ public class Autoload : MonoBehaviour
 
             if (!placed)
             {
-                Debug.LogWarning($"Не удалось разместить груз: {cargoObject.name}");
+                Debug.LogWarning($"Не удалось поместить груз: {cargo.name}");
             }
         }
 
         Debug.Log("Завершение размещения грузов.");
     }
-}
 
-public class CargoHold
-{
-    public Vector3 Dimensions { get; private set; }
-    public float MaxPayload { get; private set; }
-    public float CurrentWeight { get; private set; }
-    public Vector3 CenterOfGravity { get; private set; } = new Vector3(13, 0, 0);
-
-    private List<PlacedCargo> placedCargos = new List<PlacedCargo>();
-
-    public CargoHold(Vector3 dimensions, float maxPayload)
+    private bool CanPlaceCargo(Vector3 position, Vector3 size, List<PlacedCargo> placedCargos, Vector3 containerSize)
     {
-        Dimensions = dimensions;
-        MaxPayload = maxPayload;
-    }
+        Debug.Log($"Проверка возможности размещения груза в позиции {position} с размером {size}");
 
-    public void AddCargo(GameObject cargo, Vector3 position)
-    {
-        Vector3 size = cargo.transform.localScale;
-        float weight = cargo.GetComponent<Cargo>().Weight;
-        CurrentWeight += weight;
-
-        UpdateCenterOfGravity(size, position, weight);
-
-        PlacedCargo newCargo = new PlacedCargo(position, size, weight);
-        placedCargos.Add(newCargo);
-
-        /*PlaceCargoInScene(cargo, position, size);*/
-    }
-
-    private void UpdateCenterOfGravity(Vector3 size, Vector3 position, float weight)
-    {
-        float newCenterOfGravityX = 
-            (CurrentWeight * CenterOfGravity.x + weight * position.x) 
-            / (CurrentWeight + weight);
-
-        CenterOfGravity = new Vector3(newCenterOfGravityX, CenterOfGravity.y, CenterOfGravity.z);
-        Debug.Log($"Обновленный центр тяжести: {CenterOfGravity.x}");
-    }
-
-    public bool CanPlaceCargo(GameObject cargo, Vector3 position)
-    {
-        Vector3 size = cargo.transform.localScale;
-
+        // Проверка, что груз помещается в контейнере
         if (position.x < 0 || position.y < 0 || position.z < 0 ||
-            position.x + size.x > Dimensions.x ||
-            position.y + size.y > Dimensions.y ||
-            position.z + size.z > Dimensions.z)
+            position.x + size.x > containerSize.x ||
+            position.y + size.y > containerSize.y ||
+            position.z + size.z > containerSize.z)
         {
+            Debug.Log($"Груз выходит за пределы контейнера: {position} + {size} (контейнер: {containerSize})");
             return false;
         }
 
+        // Проверка пересечения с уже размещенными грузами
         foreach (var placedCargo in placedCargos)
         {
-            if (Intersect(position, size, placedCargo.Position, placedCargo.Size))
+            if (Intersect(position, size, placedCargo.Position, placedCargo.Size)) // Используем размер текущего груза
             {
+                Debug.Log($"Пересечение с уже размещенным грузом в позиции {placedCargo.Position} с размером {placedCargo.Size}");
                 return false;
             }
         }
@@ -131,12 +102,14 @@ public class CargoHold
         return true;
     }
 
-    /*private void PlaceCargoInScene(GameObject cargoObject, Vector3 position, Vector3 size)
+    private void PlaceCargo(Vector3 position, GameObject cargoObject, Vector3 size)
     {
+        // Создание нового экземпляра груза
         GameObject placedCargo = Instantiate(cargoObject);
-        placedCargo.transform.position = position + size / 2; // Центрирование груза на позиции
+        placedCargo.transform.position = position + size / 2; // Установка центра объекта на позицию
         placedCargo.transform.localScale = size;
-    }*/
+        Debug.Log($"Размещен груз: {placedCargo.name} на позиции {position} с размером {size}");
+    }
 
     private bool Intersect(Vector3 pos1, Vector3 size1, Vector3 pos2, Vector3 size2)
     {
@@ -147,19 +120,18 @@ public class CargoHold
                  pos1.z + size1.z <= pos2.z ||
                  pos2.z + size2.z <= pos1.z);
     }
-}
 
-public class PlacedCargo
-{
-    public Vector3 Position { get; }
-    public Vector3 Size { get; }
-    public float Weight { get; }
-
-    public PlacedCargo(Vector3 position, Vector3 size, float weight)
+    // Класс для хранения информации о размещенных грузах
+    private class PlacedCargo
     {
-        Position = position;
-        Size = size;
-        Weight = weight;
+        public Vector3 Position { get; }
+        public Vector3 Size { get; }
+
+        public PlacedCargo(Vector3 position, Vector3 size)
+        {
+            Position = position;
+            Size = size;
+        }
     }
 }
 

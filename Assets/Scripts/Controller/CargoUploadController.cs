@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class CargoUploadController : MonoBehaviour
 {
-    private CargoManager _cargoManager;
+    private Autoload _cargoManager;
 
     private void Start()
     {
-        _cargoManager = gameObject.AddComponent<CargoManager>();
+        _cargoManager = gameObject.AddComponent<Autoload>();
 
     }
 
