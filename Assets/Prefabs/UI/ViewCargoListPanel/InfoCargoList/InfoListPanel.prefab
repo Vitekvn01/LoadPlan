@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 9141498012801217423}
   - component: {fileID: 2987687444228637456}
   m_Layer: 5
-  m_Name: ViewListPanel
+  m_Name: InfoListPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -315,6 +315,7 @@ MonoBehaviour:
   _nameText: {fileID: 3978254073264885469}
   _toogleTiering: {fileID: 4800827839665652916}
   _toogleFloor: {fileID: 8476314845338394597}
+  AdditionalPanelPrefab: {fileID: 6120763359896406146, guid: 2a70f0c2f60fb914ead813d56830490d, type: 3}
 --- !u!1 &2336099272082364950
 GameObject:
   m_ObjectHideFlags: 0

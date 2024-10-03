@@ -78,12 +78,12 @@ public class CargoManager : MonoBehaviour
         return true;
     }
 
-    public void PlaceCargoListInScene(List<Cargo> cargoList, Vector3 startPosition)
+    /*public void PlaceCargoListInScene(List<Cargo> cargoList, Vector3 startPosition)
     {
         foreach (var cargo in cargoList)
         {
             Vector3 size = new Vector3(cargo.Length, cargo.Height, cargo.Width);
-            GameObject placedCargo = Instantiate(cargo.CargoPrefab);
+*//*            GameObject placedCargo = Instantiate(cargo.CargoPrefab);*//*
             placedCargo.transform.position = startPosition + size / 2;
             placedCargo.transform.localScale = size;
 
@@ -93,7 +93,7 @@ public class CargoManager : MonoBehaviour
             startPosition += new Vector3(0, size.y, 0);
         }
     }
-
+*/
     private bool Intersect(Vector3 pos1, Vector3 size1, Vector3 pos2, Vector3 size2)
     {
         return !(pos1.x + size1.x <= pos2.x ||

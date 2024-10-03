@@ -33,7 +33,7 @@ public class ViewCargoListsPanel : MonoBehaviour
         {
             GameObject infoCargoListElement = Instantiate(_infoCargoListElementPrefab, _contentScrollView.transform);
             List<Cargo> cargos = _allCargoLists[i];
-            infoCargoListElement.GetComponent<InfoCargoList>().SetCargoInfo(cargos[0], cargos.Count);
+            infoCargoListElement.GetComponent<InfoCargoListElement>().SetCargoInfo(_allCargoLists[i], cargos[0], cargos.Count);
             InfoCargoListElements.Add(infoCargoListElement);
         }
     }

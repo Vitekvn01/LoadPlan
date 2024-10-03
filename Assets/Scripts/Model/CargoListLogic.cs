@@ -30,4 +30,10 @@ public class CargoListLogic
 
         _allCargoLists.Add(cargoList);
     }
+
+    public void DeleteCargoList(List<Cargo> CargoList)
+    {
+        _allCargoLists.Remove(CargoList);
+    }
+
 }

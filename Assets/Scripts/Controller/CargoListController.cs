@@ -12,8 +12,8 @@ public class CargoListController : SingletonBase<CargoListController>
     private ViewCargoListsPanel _viewCargoListsPanel;
     private CargoListLogic _cargoListLogic;
 
-    private List<List<Cargo>> _allCargoLists = new List<List<Cargo>>();
-    public List<List<Cargo>> AllCargoLists => _allCargoLists;
+    private static List<List<Cargo>> _allCargoLists = new List<List<Cargo>>();
+    public static List<List<Cargo>> AllCargoLists => _allCargoLists;
 
     private float _length = 0;
     private float _width = 0;
