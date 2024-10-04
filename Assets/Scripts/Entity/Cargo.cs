@@ -5,7 +5,7 @@ using UnityEngine;
 public class Cargo : MonoBehaviour
 {
     private float _length;
-    public float Length => _length;
+    public float Length { get; private set; }
 
     private float _width;
     public float Width => _width;

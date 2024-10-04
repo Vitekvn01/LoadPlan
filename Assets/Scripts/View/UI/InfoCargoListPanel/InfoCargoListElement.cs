@@ -19,31 +19,32 @@ public class InfoCargoListElement : MonoBehaviour, IPointerDownHandler
 
     private List<Cargo> _cargoList;
 
-    public GameObject AdditionalPanelPrefab;
+    public GameObject AdditionalPanel;
+
+
 
     public void OnPointerDown(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            // Спавним новый UI-элемент
-            GameObject newUIElement = Instantiate(AdditionalPanelPrefab);
-            newUIElement.SetActive(true);
+            AdditionalPanel.SetActive(true);
             // Устанавливаем родителя - корневой Canvas
             RectTransform canvasRectTransform = gameObject.GetComponentInParent<Canvas>().transform as RectTransform;
-            newUIElement.transform.SetParent(canvasRectTransform, false);
+            AdditionalPanel.transform.SetParent(canvasRectTransform, false);
 
             Vector2 localPoint;
+
             // Преобразуем экранные координаты в локальные координаты Canvas
             RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRectTransform, eventData.position, eventData.pressEventCamera, out localPoint);
 
-            RectTransform newElementRectTransform = newUIElement.GetComponent<RectTransform>();
+            RectTransform newElementRectTransform = AdditionalPanel.GetComponent<RectTransform>();
 
             // Вычисляем половину ширины и высоты
             Vector2 halfSize = new Vector2(newElementRectTransform.rect.width / 2, - newElementRectTransform.rect.height / 2);
 
 
             // Устанавливаем позицию нового элемента на курсор мыши
-            newUIElement.GetComponent<RectTransform>().anchoredPosition = localPoint + halfSize;
+            AdditionalPanel.GetComponent<RectTransform>().anchoredPosition = localPoint + halfSize;
         }
     }
 
