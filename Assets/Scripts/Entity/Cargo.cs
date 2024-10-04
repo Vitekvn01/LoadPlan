@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cargo : MonoBehaviour
+public class Cargo
 {
     private float _length;
     public float Length { get; private set; }

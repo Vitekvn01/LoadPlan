@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CargoListController : SingletonBase<CargoListController>
 {
@@ -12,8 +14,13 @@ public class CargoListController : SingletonBase<CargoListController>
     private ViewCargoListsPanel _viewCargoListsPanel;
     private CargoListLogic _cargoListLogic;
 
-    private static List<List<Cargo>> _allCargoLists = new List<List<Cargo>>();
-    public static List<List<Cargo>> AllCargoLists => _allCargoLists;
+    public event Action OnCargoListsChanged;
+
+    private List<List<Cargo>> _allCargoLists = new List<List<Cargo>>();
+    public List<List<Cargo>> AllCargoLists => _allCargoLists;
+
+
+    
 
     private float _length = 0;
     private float _width = 0;
@@ -27,6 +34,7 @@ public class CargoListController : SingletonBase<CargoListController>
 
     protected override void Awake()
     {
+        base.Awake();
         InitCargoListLogic();
         InitCreateCargoListPanel();
         InitViewCargoLists();
@@ -61,6 +69,7 @@ public class CargoListController : SingletonBase<CargoListController>
     {
         GameObject UIPanel = Instantiate(UIViewCargoListsPanelPrefab);
         _viewCargoListsPanel = UIPanel.GetComponent<ViewCargoListsPanel>();
+        _viewCargoListsPanel.SetAllCargoLists(AllCargoLists);
     }
 
     #endregion
@@ -136,18 +145,30 @@ public class CargoListController : SingletonBase<CargoListController>
 
     private void HoldCreateCargoListButton()
     {
-        if (_length != 0 && _height != 0 && _width != 0 && _weight != 0 && _count != 0)
-        {
-            _cargoListLogic.CreateCargoList(_length, _width, _height, _weight, _name, _isTiering, _isOnlyFloor, _count);
-            _viewCargoListsPanel.SetAllCargoLists(_cargoListLogic.AllCargoLists); 
-            Debug.Log("Всего листов: " + _cargoListLogic.AllCargoLists.Count);
-
-        }
-        else Debug.LogWarning("Заполните все поля!");
-
+        CreateCreateCargoList();
 
     }
     #endregion
 
+    private void CreateCreateCargoList()
+    {
+        if (_length != 0 && _height != 0 && _width != 0 && _weight != 0 && _count != 0)
+        {
+            _cargoListLogic.CreateCargoList(_length, _width, _height, _weight, _name, _isTiering, _isOnlyFloor, _count);
+/*            _viewCargoListsPanel.SetAllCargoLists(AllCargoLists);*/
+            OnCargoListsChanged?.Invoke();
+            Debug.Log("Всего листов: " + AllCargoLists.Count);
+
+        }
+        else Debug.LogWarning("Заполните все поля!");
+
+    }
+
+    public void DeleteCargoList(List<Cargo> cargoList)
+    {
+        _cargoListLogic.DeleteCargoList(cargoList);
+        OnCargoListsChanged?.Invoke();
+        Debug.Log("Всего листов: " + AllCargoLists.Count);
+    }
 } 
 

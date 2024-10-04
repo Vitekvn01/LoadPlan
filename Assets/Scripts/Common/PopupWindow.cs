@@ -7,7 +7,7 @@ public class PopupWindow : MonoBehaviour
 {
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
             PointerEventData eventData = new PointerEventData(EventSystem.current);
             eventData.position = Input.mousePosition;

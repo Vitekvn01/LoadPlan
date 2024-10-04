@@ -7,22 +7,18 @@ public class ViewCargoListsPanel : MonoBehaviour
 {
     [SerializeField] private GameObject _contentScrollView;
     [SerializeField] private GameObject _infoCargoListElementPrefab;
-    private List<GameObject> InfoCargoListElements = new List<GameObject>();
-
+    private List<GameObject> _infoCargoListElements = new List<GameObject>();
 
     private List<List<Cargo>> _allCargoLists;
 
-    public Action OnEventSetCargoLists;
-
     private void Start()
     {
-        OnEventSetCargoLists += UpdateViewUI;
+        CargoListController.Instance.OnCargoListsChanged += UpdateViewUI;
     }
 
     public void SetAllCargoLists(List<List<Cargo>> AllCargoLists)
     {
         _allCargoLists = AllCargoLists;
-        OnEventSetCargoLists.Invoke();
     }
 
     private void UpdateViewUI()
@@ -34,18 +30,18 @@ public class ViewCargoListsPanel : MonoBehaviour
             GameObject infoCargoListElement = Instantiate(_infoCargoListElementPrefab, _contentScrollView.transform);
             List<Cargo> cargos = _allCargoLists[i];
             infoCargoListElement.GetComponent<InfoCargoListElement>().SetCargoInfo(_allCargoLists[i], cargos[0], cargos.Count);
-            InfoCargoListElements.Add(infoCargoListElement);
+            _infoCargoListElements.Add(infoCargoListElement);
         }
     }
 
     private void DeleteInfoCargoListElements()
     {
 
-        for (int i = 0; i < InfoCargoListElements.Count; i++)
+        for (int i = 0; i < _infoCargoListElements.Count; i++)
         {
-            Destroy(InfoCargoListElements[i]);
+            Destroy(_infoCargoListElements[i]);
         }
 
-        InfoCargoListElements.Clear();
+        _infoCargoListElements.Clear();
     }
 }

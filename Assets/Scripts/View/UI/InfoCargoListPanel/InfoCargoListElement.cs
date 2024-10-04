@@ -17,7 +17,7 @@ public class InfoCargoListElement : MonoBehaviour, IPointerDownHandler
     public Toggle _toogleTiering;
     public Toggle _toogleFloor;
 
-    private List<Cargo> _cargoList;
+    public List<Cargo> _cargoList;
 
     public GameObject AdditionalPanel;
 
@@ -25,7 +25,7 @@ public class InfoCargoListElement : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Left)
+        if (eventData.button == PointerEventData.InputButton.Right)
         {
             AdditionalPanel.SetActive(true);
             // Устанавливаем родителя - корневой Canvas
@@ -40,7 +40,7 @@ public class InfoCargoListElement : MonoBehaviour, IPointerDownHandler
             RectTransform newElementRectTransform = AdditionalPanel.GetComponent<RectTransform>();
 
             // Вычисляем половину ширины и высоты
-            Vector2 halfSize = new Vector2(newElementRectTransform.rect.width / 2, - newElementRectTransform.rect.height / 2);
+            Vector2 halfSize = new Vector2(newElementRectTransform.rect.width / 2, -newElementRectTransform.rect.height / 2);
 
 
             // Устанавливаем позицию нового элемента на курсор мыши
@@ -48,9 +48,9 @@ public class InfoCargoListElement : MonoBehaviour, IPointerDownHandler
         }
     }
 
-    public void SetCargoInfo(List<Cargo> cargos, Cargo cargo, int count)
+    public void SetCargoInfo(List<Cargo> cargoList, Cargo cargo, int count)
     {
-        _cargoList = cargos;
+        _cargoList = cargoList;
         _lengthText.text = "Length:" + cargo.Length.ToString();
         _widthText.text = "Width:" + cargo.Width.ToString();
         _heightText.text = "Height:" + cargo.Height.ToString();
@@ -61,4 +61,16 @@ public class InfoCargoListElement : MonoBehaviour, IPointerDownHandler
         _toogleFloor.isOn = cargo.IsOnlyFloor;
     }
 
+    public void DeleteCargoList()
+    {
+        if (_cargoList != null)
+        {
+            CargoListController.Instance.DeleteCargoList(_cargoList);
+        }
+    }
+
+    private void OnDisable()
+    {
+        Destroy(AdditionalPanel);
+    }
 }
