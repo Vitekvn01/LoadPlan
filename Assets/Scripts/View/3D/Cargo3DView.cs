@@ -30,9 +30,13 @@ public class Cargo3DView : MonoBehaviour, IMovable
         if (_isMoving)
         {
             transform.position = hit.point + hit.normal * (transform.localScale.y / 2f);
-            if (_checkerCollision.CheckCollisionCollider() && Vector3.Dot(hit.normal, Vector3.up) == 1f)
+
+            AutoLinking(hit);
+
+            if (_checkerCollision.CheckCollisionCollider(hit) && Vector3.Dot(hit.normal, Vector3.up) == 1f)
             {
                 ChangeColor(Color.green);
+
             }
             else
             {
@@ -49,7 +53,7 @@ public class Cargo3DView : MonoBehaviour, IMovable
     public void StopMoving(RaycastHit hit)
     {
 
-        if (_checkerCollision.CheckCollisionCollider() && Vector3.Dot(hit.normal, Vector3.up) == 1f)
+        if (_checkerCollision.CheckCollisionCollider(hit) && Vector3.Dot(hit.normal, Vector3.up) == 1f)
         {
             _lastDropPosition = transform.position;
             ChangeColor(new Color(1, 1, 1, 1));
@@ -64,7 +68,7 @@ public class Cargo3DView : MonoBehaviour, IMovable
         _isMoving = false;
     }
 
-    private void ChangeColor( Color color)
+    private void ChangeColor(Color color)
     {
         Renderer[] visualRenderers = gameObject.GetComponentsInChildren<Renderer>();
 
@@ -74,6 +78,19 @@ public class Cargo3DView : MonoBehaviour, IMovable
         }
     }
 
+    private void AutoLinking(RaycastHit hit)
+    {
+        Bounds targetBounds = hit.collider.bounds; // коллайдер груза на который устанавливаем
+
+        Vector3 newPosition = transform.position;
+
+        newPosition.y = targetBounds.max.y + (transform.localScale.y / 2f); // высота
+
+        newPosition.x = Mathf.Clamp(newPosition.x, targetBounds.min.x + (transform.localScale.x / 2f), targetBounds.max.x - (transform.localScale.x / 2f)); //ограничение по X
+        newPosition.z = Mathf.Clamp(newPosition.z, targetBounds.min.z + (transform.localScale.z / 2f), targetBounds.max.z - (transform.localScale.z / 2f));//ограничение по Y
+
+        transform.position = newPosition;
+    }
 
 }
 

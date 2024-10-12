@@ -18,8 +18,8 @@ public class RaycastLogic
         if (Physics.Raycast(_ray, out _hit))
         {
             HitPostion = _hit.point;
-            Debug.Log(HitPostion);
-            Debug.Log(_hit.collider.name);
+/*            Debug.Log(HitPostion);
+            Debug.Log(_hit.collider.name);*/
         }
     }
 
