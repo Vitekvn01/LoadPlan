@@ -7,7 +7,6 @@ public class Cursor3DController : SingletonBase<Cursor3DController>
 
     private IMovable movableObject;
     private RaycastLogic _raycastLogic;
-    private bool _isSelected;
 
     protected override void Awake()
     {
@@ -30,11 +29,13 @@ public class Cursor3DController : SingletonBase<Cursor3DController>
         }
         else
         {
-            movableObject.Move(_raycastLogic.HitPostion);
+
+
+            movableObject.Move(_raycastLogic.Hit);
 
             if (Input.GetMouseButtonDown(0))
             {
-                movableObject.StopMoving();
+                movableObject.StopMoving(_raycastLogic.Hit);
                 movableObject = null;
             }
         }

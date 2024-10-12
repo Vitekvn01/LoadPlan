@@ -7,6 +7,8 @@ public class RaycastLogic
     private Ray _ray;
     private RaycastHit _hit;
 
+    public RaycastHit Hit => _hit;
+
     public Vector3 HitPostion { get; private set; }
     public GameObject HitObject { get; private set; }
     public void RaycastPosition()
