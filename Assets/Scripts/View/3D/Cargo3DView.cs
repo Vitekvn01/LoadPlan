@@ -31,9 +31,10 @@ public class Cargo3DView : MonoBehaviour, IMovable
         {
             transform.position = hit.point + hit.normal * (transform.localScale.y / 2f);
 
+
             AutoLinking(hit);
 
-            if (_checkerCollision.CheckCollisionCollider(hit) && Vector3.Dot(hit.normal, Vector3.up) == 1f)
+            if (_checkerCollision.CheckCollisionCollider() && Vector3.Dot(hit.normal, Vector3.up) == 1f)
             {
                 ChangeColor(Color.green);
 
@@ -53,7 +54,7 @@ public class Cargo3DView : MonoBehaviour, IMovable
     public void StopMoving(RaycastHit hit)
     {
 
-        if (_checkerCollision.CheckCollisionCollider(hit) && Vector3.Dot(hit.normal, Vector3.up) == 1f)
+        if (_checkerCollision.CheckCollisionCollider() && Vector3.Dot(hit.normal, Vector3.up) == 1f)
         {
             _lastDropPosition = transform.position;
             ChangeColor(new Color(1, 1, 1, 1));
