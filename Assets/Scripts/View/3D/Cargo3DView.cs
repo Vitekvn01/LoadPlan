@@ -13,7 +13,8 @@ public class Cargo3DView : MonoBehaviour, IMovable
     private Vector3 _movablePosition;
     private CheckerCollision _checkerCollision;
 
-    private void Start()
+
+    private void Awake()
     {
         _checkerCollision = new CheckerCollision(gameObject);
     }
@@ -34,7 +35,7 @@ public class Cargo3DView : MonoBehaviour, IMovable
 
             AutoLinking(hit);
 
-            if (_checkerCollision.CheckCollisionCollider() && Vector3.Dot(hit.normal, Vector3.up) == 1f)
+            if (_checkerCollision.CheckCollisionCollider())
             {
                 ChangeColor(Color.green);
 
@@ -51,10 +52,10 @@ public class Cargo3DView : MonoBehaviour, IMovable
         transform.position = _lastDropPosition;
     }
 
-    public void StopMoving(RaycastHit hit)
+    public void StopMoving()
     {
 
-        if (_checkerCollision.CheckCollisionCollider() && Vector3.Dot(hit.normal, Vector3.up) == 1f)
+        if (_checkerCollision.CheckCollisionCollider())
         {
             _lastDropPosition = transform.position;
             ChangeColor(new Color(1, 1, 1, 1));
@@ -91,7 +92,11 @@ public class Cargo3DView : MonoBehaviour, IMovable
         newPosition.z = Mathf.Clamp(newPosition.z, targetBounds.min.z + (transform.localScale.z / 2f), targetBounds.max.z - (transform.localScale.z / 2f));//ограничение по Y
 
         transform.position = newPosition;
-    }
+    }   
 
+    public bool IsCanPlace()
+    {
+        return _checkerCollision.CheckCollisionCollider();
+    }
 }
 

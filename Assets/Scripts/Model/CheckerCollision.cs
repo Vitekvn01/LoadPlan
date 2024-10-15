@@ -22,8 +22,6 @@ public class CheckerCollision
 
         foreach (Collider collider in colliders)
         {
-            // Вычисляем направление на коллайдер
-/*            Vector3 directionToCollider = (_objectCollider.bounds.center - collider.bounds.center).normalized;*/
 
             if (collider == _objectCollider) continue;
 
@@ -61,11 +59,5 @@ public class CheckerCollision
         Debug.Log(collider.name + " Коллайдер: " + objectBottom + " - " + otherTop + " && " + objectTop + " - " + otherBottom);
         
         return objectBottom >= otherTop && objectTop >= otherBottom;
-    }
-    // Проверка на боковую поверхность
-    private bool IsSideCollision(Vector3 directionToCollider)
-    {
-        // Если пересечение с боковой стороной (примерно по оси X или Z)
-        return Mathf.Abs(directionToCollider.x) > 0.9f || Mathf.Abs(directionToCollider.z) > 0.9f;
     }
 }

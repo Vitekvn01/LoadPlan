@@ -69,6 +69,14 @@ public class InfoCargoListElement : MonoBehaviour, IPointerDownHandler
         }
     }
 
+    public void ManualUpload()
+    {
+        if (_cargoList != null)
+        {
+            CargoUploadController.Instance.StartManualUpload(_cargoList);
+        }
+    }
+
     private void OnDisable()
     {
         Destroy(AdditionalPanel);

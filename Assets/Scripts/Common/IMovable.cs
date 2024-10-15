@@ -6,6 +6,8 @@ public interface IMovable
 {
     public void StartMoving();
     public void Move(RaycastHit hit);
-    public void StopMoving(RaycastHit hit);
+    public void StopMoving();
     public void OnDrop();
+
+    public bool IsCanPlace();
 }
