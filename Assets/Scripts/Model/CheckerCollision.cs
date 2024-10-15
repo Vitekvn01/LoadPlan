@@ -9,6 +9,7 @@ public class CheckerCollision
     {
         _object = objectCollider;
         _objectCollider = _object.GetComponent<Collider>();
+        Debug.Log(_object.GetComponent<Collider>());
     }
 
     private GameObject _object;
@@ -22,8 +23,8 @@ public class CheckerCollision
 
         foreach (Collider collider in colliders)
         {
-
-            if (collider == _objectCollider) continue;
+            Debug.Log(collider.name);
+            if (collider.name == _objectCollider.name) continue;
 
             if (_object.GetComponent<Cargo3DView>().IsOnlyFloor)
             {
@@ -37,6 +38,7 @@ public class CheckerCollision
 
                 if (collider.gameObject.GetComponent<Cargo3DView>().IsTiering)
                 {
+                    Debug.Log(collider.name + " IsTiering");
                     return IsTopCollision(collider);
                 }
                 else return false;
@@ -56,7 +58,7 @@ public class CheckerCollision
         float otherBottom = collider.bounds.min.y; // Нижняя грань другого коллайдера
         float otherTop = collider.bounds.max.y;     // Верхняя грань другого коллайдера
 
-        Debug.Log(collider.name + " Коллайдер: " + objectBottom + " - " + otherTop + " && " + objectTop + " - " + otherBottom);
+/*        Debug.Log(collider.name + " Коллайдер: " + objectBottom + " - " + otherTop + " && " + objectTop + " - " + otherBottom);*/
         
         return objectBottom >= otherTop && objectTop >= otherBottom;
     }

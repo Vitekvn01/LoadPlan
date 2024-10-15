@@ -50,7 +50,7 @@ public class Cursor3DController : SingletonBase<Cursor3DController>
 
     private void CargoMove()
     {
-            Debug.Log("CargoMove");
+/*            Debug.Log("CargoMove");*/
             _movableObject.Move(_raycastLogic.Hit);
     }
 

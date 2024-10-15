@@ -14,7 +14,7 @@ public class Cargo3DView : MonoBehaviour, IMovable
     private CheckerCollision _checkerCollision;
 
 
-    private void Awake()
+    private void Start()
     {
         _checkerCollision = new CheckerCollision(gameObject);
     }

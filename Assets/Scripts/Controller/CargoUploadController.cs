@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CargoUploadController : SingletonBase<CargoUploadController>
 {
+    private int id;
+
     [SerializeField] private GameObject _cargoPrefub;
 
     private CargoManager _cargoManager;
@@ -41,7 +43,6 @@ public class CargoUploadController : SingletonBase<CargoUploadController>
 
     private void NextCargoUpload()
     {
-        Debug.Log("_placedCount:" + _placedCount + "_currentCargoList.Count" + _currentCargoList.Count);
         if (_placedCount < _currentCargoList.Count)
         {
             _placedCount++;
@@ -57,6 +58,11 @@ public class CargoUploadController : SingletonBase<CargoUploadController>
     private GameObject CargoSpawn()
     {
         GameObject cargo = Instantiate(_cargoPrefub);
+        BoxCollider collider = cargo.AddComponent<BoxCollider>();
+        collider.size = cargo.transform.localScale;
+        cargo.name = _currentCargoList[0].Name + ": " + _placedCount;
+        collider.name = _currentCargoList[0].Name + ": " + _placedCount;
+        Physics.SyncTransforms();
         return cargo;
     }
 }
