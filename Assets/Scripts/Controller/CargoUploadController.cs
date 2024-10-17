@@ -57,11 +57,15 @@ public class CargoUploadController : SingletonBase<CargoUploadController>
 
     private GameObject CargoSpawn()
     {
-        GameObject cargo = Instantiate(_cargoPrefub);
-        BoxCollider collider = cargo.AddComponent<BoxCollider>();
+        GameObject cargo = Instantiate(_cargoPrefub, new Vector3(0,0,0), Quaternion.identity);
+        BoxCollider collider = cargo.GetComponent<BoxCollider>();
         collider.size = cargo.transform.localScale;
         cargo.name = _currentCargoList[0].Name + ": " + _placedCount;
         collider.name = _currentCargoList[0].Name + ": " + _placedCount;
+/*        cargo.transform.position += Vector3.up * 0.01f; // Немного сдвигаем объект
+        cargo.transform.position -= Vector3.up * 0.01f; // Возвращаем на место
+        collider.enabled = false;
+        collider.enabled = true;*/
         Physics.SyncTransforms();
         return cargo;
     }

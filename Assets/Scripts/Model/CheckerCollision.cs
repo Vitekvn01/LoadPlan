@@ -16,7 +16,7 @@ public class CheckerCollision
     private Collider _objectCollider;
     public bool CheckCollisionCollider()
     {
-        
+
         Vector3 halfCollider = _objectCollider.bounds.extents;
         Collider[] colliders = Physics.OverlapBox(_objectCollider.bounds.center, halfCollider, _object.transform.rotation);
 
@@ -49,7 +49,7 @@ public class CheckerCollision
     }
 
     // Проверка на верхнюю поверхность
-    private bool IsTopCollision(Collider collider)
+    public bool IsTopCollision(Collider collider)
     {
         float objectBottom = _objectCollider.bounds.min.y; // Нижняя грань устанавливаемого объекта
         float objectTop = _objectCollider.bounds.max.y;   // Верхняя грань устанавливаемого объекта
@@ -58,8 +58,11 @@ public class CheckerCollision
         float otherBottom = collider.bounds.min.y; // Нижняя грань другого коллайдера
         float otherTop = collider.bounds.max.y;     // Верхняя грань другого коллайдера
 
-/*        Debug.Log(collider.name + " Коллайдер: " + objectBottom + " - " + otherTop + " && " + objectTop + " - " + otherBottom);*/
-        
+        /*        Debug.Log(collider.name + " Коллайдер: " + objectBottom + " - " + otherTop + " && " + objectTop + " - " + otherBottom);*/
+
         return objectBottom >= otherTop && objectTop >= otherBottom;
     }
+
+
+
 }
