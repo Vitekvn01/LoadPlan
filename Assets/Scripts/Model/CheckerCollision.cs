@@ -5,47 +5,43 @@ using UnityEngine;
 
 public class CheckerCollision
 {
-    public CheckerCollision(GameObject objectCollider)
+    public CheckerCollision(Cargo3DView cargoView)
     {
-        _object = objectCollider;
-        _objectCollider = _object.GetComponent<Collider>();
-        Debug.Log(_object.GetComponent<Collider>());
+        _object = cargoView;
+        _objectCollider = _object.gameObject.GetComponent<Collider>();
     }
-
-    private GameObject _object;
     private Collider _objectCollider;
-    public bool CheckCollisionCollider()
+    private Cargo3DView _object;
+    public bool CheckCollisionCollider(Collider collider)
     {
-
-        Vector3 halfCollider = _objectCollider.bounds.extents;
-        Collider[] colliders = Physics.OverlapBox(_objectCollider.bounds.center, halfCollider, _object.transform.rotation);
-
-
-        foreach (Collider collider in colliders)
+        if (_object.IsOnlyFloor)
         {
-            Debug.Log(collider.name);
-            if (collider.name == _objectCollider.name) continue;
-
-            if (_object.GetComponent<Cargo3DView>().IsOnlyFloor)
+            if (collider.gameObject.GetComponent<CargoArea>() != null)
             {
-
-                return (collider.gameObject.GetComponent<CargoArea>());
-
+                return true;
             }
             else
             {
-                if (collider.gameObject.GetComponent<CargoArea>()) return true;
-
-                if (collider.gameObject.GetComponent<Cargo3DView>().IsTiering)
-                {
-                    Debug.Log(collider.name + " IsTiering");
-                    return IsTopCollision(collider);
-                }
-                else return false;
-
+                return false;
             }
         }
-        return false;
+        else
+        {
+            // Объект может стоять на CargoArea или на ярус выше
+            if (collider.gameObject.GetComponent<CargoArea>() != null)
+            {
+                return true;
+            }
+            else if (collider.gameObject.GetComponent<Cargo3DView>().IsTiering)
+            {
+                Debug.Log(collider.name + " IsTiering");
+                return IsTopCollision(collider);
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 
     // Проверка на верхнюю поверхность

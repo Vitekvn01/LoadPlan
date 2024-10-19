@@ -4,34 +4,38 @@ using UnityEngine;
 
 public class Cargo
 {
-    private float _length;
     public float Length { get; private set; }
+    public float Width { get; private set; }
+    public float Height { get; private set; }
+    public float Weight { get; private set; }
+    public string Name { get; private set; }
 
-    private float _width;
-    public float Width => _width;
+    public bool IsTiering { get; private set; }
+    public bool IsOnlyFloor { get; private set; }
 
-    private float _height;
-    public float Height => _height;
+    private Cargo3DView _cargo3DView ;
 
-    private float _weight;
-    public float Weight => _weight;
-
-    private bool _isTiering;
-    public bool IsTiering => _isTiering;
-
-    private bool _isOnlyFloor;
-    public bool IsOnlyFloor => _isOnlyFloor;
-
-    private string _name;
-    public string Name => _name;
     public Cargo(float length, float width, float height, float weight, string name, bool isTiering, bool isOnlyFloor)
     {
-        _length = length;
-        _width = width;
-        _height = height;
-        _weight = weight;
-        _name = name;
-        _isTiering = isTiering;
-        _isOnlyFloor = isOnlyFloor;
+        Length = length;
+        Width = width;
+        Height = height;
+        Weight = weight;
+        Name = name;
+        IsTiering = isTiering;
+        IsOnlyFloor = isOnlyFloor;
+    }
+
+    public void Delete3DView()
+    {
+        if (_cargo3DView != null)
+        {
+            _cargo3DView.Delete();
+        }
+    }
+
+    public void SetCargo3DView(Cargo3DView view)
+    {
+        _cargo3DView = view;
     }
 }

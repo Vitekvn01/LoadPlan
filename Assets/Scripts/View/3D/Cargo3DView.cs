@@ -4,21 +4,32 @@ using UnityEngine;
 
 public class Cargo3DView : MonoBehaviour, IMovable
 {
+
+    public float Length { get; private set; }
+    public float Width { get; private set; }
+    public float Height { get; private set; }
+    public float Weight { get; private set; }
+    public string Name { get; private set; }
+
     public bool IsTiering;
     public bool IsOnlyFloor;
-    private bool IsCollision = false;
 
+
+
+    private bool IsCollision = false;
     private bool _isMoving = false;
+
     private Vector3 _lastDropPosition;
-    private Vector3 _movablePosition;
+
     private CheckerCollision _checkerCollision;
 
 
     private void Start()
     {
-        _checkerCollision = new CheckerCollision(gameObject);
+        _checkerCollision = new CheckerCollision(this);
     }
 
+    #region IMovable
     public void StartMoving()
     {
         _lastDropPosition = transform.position;
@@ -71,7 +82,11 @@ public class Cargo3DView : MonoBehaviour, IMovable
         gameObject.layer = 0;
         _isMoving = false;
     }
-
+    public bool IsCanPlace()
+    {
+        return IsCollision;
+    }
+    #endregion
     private void ChangeColor(Color color)
     {
         Renderer[] visualRenderers = gameObject.GetComponentsInChildren<Renderer>();
@@ -96,57 +111,36 @@ public class Cargo3DView : MonoBehaviour, IMovable
         transform.position = newPosition;
     }
 
-    public bool IsCanPlace()
+    public void SetParameters(float length, float width, float height, float weight, string name, bool isTiering, bool isOnlyFloor)
     {
-        return _checkerCollision.CheckCollisionCollider();
+
+        Length = length;
+        Height = height;
+        Width = width;
+        Weight = weight;
+        Name = name;
+        IsTiering = isTiering;
+        IsOnlyFloor = isOnlyFloor;
     }
 
-    void OnDrawGizmos()
+    public void Delete()
     {
-        Gizmos.color = Color.blue;
-        //Проверьте, что он запущен в режиме Play Mode , чтобы не пытаться нарисовать это в режиме Editor 
-        //Нарисуйте куб там, где находится OverlapBox (расположенный там же, где и ваш GameObject , а также имеющий размер)
-        Gizmos.DrawWireCube(gameObject.transform.position, gameObject.transform.localScale);
+        Destroy(this.gameObject);
     }
-
 
     void OnTriggerStay(Collider other)
     {
         if (_isMoving)
         {
-            if (IsOnlyFloor)
-            {
-                // Если объект может стоять только на полу
-                if (other.gameObject.GetComponent<CargoArea>() != null)
-                {
-                    IsCollision = true;
-                }
-                else
-                {
-                    IsCollision = false;
-                }
-            }
-            else
-            {
-                // Объект может стоять на CargoArea или на ярусном объекте
-                if (other.gameObject.GetComponent<CargoArea>() != null)
-                {
-                    IsCollision = true;
-                }
-                else if (other.gameObject.GetComponent<Cargo3DView>().IsTiering)
-                {
-                    Debug.Log(other.name + " IsTiering");
-                    IsCollision = _checkerCollision.IsTopCollision(other);
-                }
-                else
-                {
-                    IsCollision = false;
-                }
-            }
+            IsCollision = _checkerCollision.CheckCollisionCollider(other);
         }
 
     }
 
-
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(gameObject.transform.position, gameObject.transform.localScale);
+    }
 }
 

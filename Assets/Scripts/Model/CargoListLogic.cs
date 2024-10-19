@@ -30,9 +30,13 @@ public class CargoListLogic
         _allCargoLists.Add(cargoList);
     }
 
-    public void DeleteCargoList(List<Cargo> CargoList)
+    public void DeleteCargoList(List<Cargo> cargoList)
     {
-        _allCargoLists.Remove(CargoList);
+        foreach (Cargo cargo in cargoList)
+        {
+            cargo.Delete3DView();
+        }
+        _allCargoLists.Remove(cargoList);
     }
 
 }

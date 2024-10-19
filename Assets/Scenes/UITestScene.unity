@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b32b0f63f628b54eba97bd465380f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsTiering: 0
+  IsTiering: 1
   IsOnlyFloor: 0
 --- !u!65 &611134453
 BoxCollider:
@@ -545,7 +545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b32b0f63f628b54eba97bd465380f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsTiering: 0
+  IsTiering: 1
   IsOnlyFloor: 0
 --- !u!65 &1142098393
 BoxCollider:
@@ -787,7 +787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b32b0f63f628b54eba97bd465380f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsTiering: 1
+  IsTiering: 0
   IsOnlyFloor: 0
 --- !u!65 &1363059539
 BoxCollider:
